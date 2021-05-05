@@ -20,7 +20,7 @@ using namespace pandemic;
 
 TEST_CASE("OperationsExpert Test")
 {
-    Board board;                 // Initialize an empty board (with 0 disease cubes in any city).
+    Board board; // Initialize an empty board (with 0 disease cubes in any city).
     CHECK(board.is_clean());
     board[City::Kinshasa] = 3;   // put 3 yellow disease cubes in Kinshasa.
     board[City::Kinshasa] = 2;   // change number of disease cubes in Kinshasa to 2.
@@ -101,6 +101,8 @@ TEST_CASE("OperationsExpert Test")
     CHECK(board[City::Miami] == 0);           //AFTER treat
     CHECK_THROWS(player.treat(City::Miami));  // illegal action: there is no disease cube on Miami, should throw an exception.
 
+    //test role function for player and is_clean function for board
+    CHECK(player.role() == "OperationsExpert");
     CHECK(!board.is_clean());
     board.remove_cures();
     CHECK(board.is_clean());
@@ -108,7 +110,7 @@ TEST_CASE("OperationsExpert Test")
 
 TEST_CASE("Dispatcher Test")
 {
-    Board board;               // Initialize an empty board (with 0 disease cubes in any city).
+    Board board; // Initialize an empty board (with 0 disease cubes in any city).
     CHECK(board.is_clean());
     board[City::Seoul] = 2;    // put 2 red disease cubes in Seoul.
     board[City::Seoul] = 4;    // change number of disease cubes in Seoul to 4.
@@ -193,6 +195,8 @@ TEST_CASE("Dispatcher Test")
     CHECK_NOTHROW(player.treat(City::Istanbul)); // legal action: after discovering cure for Black disease, the num of disease cube in Istanbul Decreases from 3 to 0.
     CHECK_THROWS(player.treat(City::Istanbul));  // illegal action: there is no disease cube on Istanbul, should throw an exception.
 
+    //test role function for player and is_clean function for board
+    CHECK(player.role() == "Dispatcher");
     CHECK(!board.is_clean());
     board.remove_cures();
     CHECK(board.is_clean());
@@ -200,7 +204,7 @@ TEST_CASE("Dispatcher Test")
 
 TEST_CASE("Scientist Test")
 {
-    Board board;                 // Initialize an empty board (with 0 disease cubes in any city).
+    Board board; // Initialize an empty board (with 0 disease cubes in any city).
     CHECK(board.is_clean());
     board[City::Kinshasa] = 3;   // put 3 yellow disease cubes in Kinshasa.
     board[City::Kinshasa] = 2;   // change number of disease cubes in Kinshasa to 2.
@@ -284,6 +288,8 @@ TEST_CASE("Scientist Test")
     CHECK(board[City::Miami] == 0);           //AFTER treat
     CHECK_THROWS(player.treat(City::Miami));  // illegal action: there is no disease cube on Miami, should throw an exception.
 
+    //test role function for player and is_clean function for board
+    CHECK(player.role() == "Scientist");
     CHECK(!board.is_clean());
     board.remove_cures();
     CHECK(board.is_clean());
@@ -291,7 +297,7 @@ TEST_CASE("Scientist Test")
 
 TEST_CASE("Researcher Test")
 {
-    Board board;               // Initialize an empty board (with 0 disease cubes in any city).
+    Board board; // Initialize an empty board (with 0 disease cubes in any city).
     CHECK(board.is_clean());
     board[City::Seoul] = 2;    // put 2 red disease cubes in Seoul.
     board[City::Seoul] = 4;    // change number of disease cubes in Seoul to 4.
@@ -325,6 +331,8 @@ TEST_CASE("Researcher Test")
     CHECK_NOTHROW(player.treat(City::Istanbul)); // legal action: after discovering cure for Black disease, the num of disease cube in Istanbul Decreases from 5 to 0.
     CHECK(board[City::Istanbul] == 0);
 
+    //test role function for player and is_clean function for board
+    CHECK(player.role() == "Researcher");
     CHECK(!board.is_clean());
     board.remove_cures();
     CHECK(board.is_clean());
@@ -332,7 +340,7 @@ TEST_CASE("Researcher Test")
 
 TEST_CASE("Medic Test")
 {
-    Board board;               // Initialize an empty board (with 0 disease cubes in any city).
+    Board board; // Initialize an empty board (with 0 disease cubes in any city).
     CHECK(board.is_clean());
     board[City::Seoul] = 2;    // put 2 red disease cubes in Seoul.
     board[City::Seoul] = 4;    // change number of disease cubes in Seoul to 4.
@@ -353,7 +361,7 @@ TEST_CASE("Medic Test")
         .take_card(City::Beijing)        //r
         .take_card(City::Osaka);         //r
 
-    // Test Unique action for Researcher player - treat
+    // Test Unique action for Medic player - treat
     CHECK_NOTHROW(player.drive(City::Shanghai)); // connected city.
     CHECK_NOTHROW(player.drive(City::Seoul));    // connected city.
     CHECK(board[City::Seoul] == 4);              // BEFORE treat
@@ -371,6 +379,8 @@ TEST_CASE("Medic Test")
     CHECK_NOTHROW(player.fly_direct(City::Kolkata));
     CHECK(board[City::Kolkata] == 0); // we discover cure for black disease, so Medic reduce all black disease in every city he is in.
 
+    //test role function for player and is_clean function for board
+    CHECK(player.role() == "Medic");
     CHECK(!board.is_clean());
     board.remove_cures();
     CHECK(board.is_clean());
@@ -378,16 +388,16 @@ TEST_CASE("Medic Test")
 
 TEST_CASE("Virologist Test")
 {
-    Board board;               // Initialize an empty board (with 0 disease cubes in any city).
+    Board board; // Initialize an empty board (with 0 disease cubes in any city).
     CHECK(board.is_clean());
     board[City::Seoul] = 2;    // put 2 red disease cubes in Seoul.
     board[City::Seoul] = 4;    // change number of disease cubes in Seoul to 4.
     board[City::Kolkata] = 3;  // put 3 black disease cubes in Kolkata
     board[City::Istanbul] = 5; // put 5 black disease cube in Istanbul
     board[City::London] = 1;   // put 1 blue disease cube in London
-    board[City::Osaka] = 1;   // put 1 blue disease cube in Osaka
+    board[City::Osaka] = 1;    // put 1 blue disease cube in Osaka
 
-    Researcher player{board, City::HongKong}; // initialize an "Researcher" player on the given board, in HongKong.
+    Researcher player{board, City::HongKong}; // initialize an "Virologist" player on the given board, in HongKong.
     player.take_card(City::Chennai)           //b
         .take_card(City::Baghdad)             //b
         .take_card(City::Jakarta)             //r
@@ -400,14 +410,16 @@ TEST_CASE("Virologist Test")
         .take_card(City::Beijing)             //r
         .take_card(City::Osaka);              //r
 
-    CHECK_NOTHROW(player.treat(City::Kolkata)); // legal action.
-    CHECK_NOTHROW(player.treat(City::London)); // legal action.
-    CHECK_NOTHROW(player.treat(City::Osaka)); // legal action.
+    CHECK_NOTHROW(player.treat(City::Kolkata));  // legal action.
+    CHECK_NOTHROW(player.treat(City::London));   // legal action.
+    CHECK_NOTHROW(player.treat(City::Osaka));    // legal action.
     CHECK_NOTHROW(player.treat(City::Istanbul)); // legal action.
 
     CHECK_THROWS(player.treat(City::NewYork)); // illegal action. NewYork does not have disease cubes.
-    CHECK_THROWS(player.treat(City::Seoul)); // illegal action. player does not have the card Seoul.
+    CHECK_THROWS(player.treat(City::Seoul));   // illegal action. player does not have the card Seoul.
 
+    //test role function for player and is_clean function for board
+    CHECK(player.role() == "Virologist");
     CHECK(!board.is_clean());
     board.remove_cures();
     CHECK(board.is_clean());
@@ -415,7 +427,7 @@ TEST_CASE("Virologist Test")
 
 TEST_CASE("GeneSplicer Test")
 {
-    Board board;                 // Initialize an empty board (with 0 disease cubes in any city).
+    Board board; // Initialize an empty board (with 0 disease cubes in any city).
     CHECK(board.is_clean());
     board[City::Kinshasa] = 3;   // put 3 yellow disease cubes in Kinshasa.
     board[City::Kinshasa] = 2;   // change number of disease cubes in Kinshasa to 2.
@@ -424,13 +436,13 @@ TEST_CASE("GeneSplicer Test")
     board[City::Chicago] = 1;    // put 1 blue disease cube in Chicago
 
     GeneSplicer player{board, City::Atlanta}; // initialize an "GeneSplicer" player on the given board, in Atlanta.
-    player.take_card(City::Johannesburg)           //-
+    player.take_card(City::Johannesburg)      //-
         .take_card(City::Khartoum)
         .take_card(City::Kinshasa) //-
         .take_card(City::BuenosAires)
         .take_card(City::HoChiMinhCity)
         .take_card(City::Atlanta);
-    
+
     // Test Unique action for GeneSplicer player - discover_cure
 
     CHECK_NOTHROW(player.build());
@@ -438,6 +450,8 @@ TEST_CASE("GeneSplicer Test")
     CHECK_NOTHROW(player.discover_cure(Color::Yellow)); // legal action.
     CHECK(player.get_num_of_card() == 0);
 
+    //test role function for player and is_clean function for board
+    CHECK(player.role() == "GeneSplicer");
     CHECK(!board.is_clean());
     board.remove_cures();
     CHECK(board.is_clean());
@@ -445,16 +459,16 @@ TEST_CASE("GeneSplicer Test")
 
 TEST_CASE("FieldDoctor Test")
 {
-    Board board;                 // Initialize an empty board (with 0 disease cubes in any city).
+    Board board; // Initialize an empty board (with 0 disease cubes in any city).
     CHECK(board.is_clean());
-    board[City::Bogota] = 3;   // put 3 yellow disease cubes in Bogota.
-    board[City::Bogota] = 6;   // change number of disease cubes in Bogota to 6.
+    board[City::Bogota] = 3;     // put 3 yellow disease cubes in Bogota.
+    board[City::Bogota] = 6;     // change number of disease cubes in Bogota to 6.
     board[City::MexicoCity] = 3; // put 3 yellow disease cubes in MexicoCity
     board[City::Miami] = 2;      // put 2 yellow disease cube in Miami
-    board[City::Lima] = 5;    // put 5 yellow disease cube in Chicago
+    board[City::Lima] = 5;       // put 5 yellow disease cube in Lima
 
-    FieldDoctor player{board, City::Bogota}; // initialize an "Scientist" player on the given board, in Atlanta, Which can "discover_cure" action with 2 cards only.
-    player.take_card(City::Johannesburg)       //-
+    FieldDoctor player{board, City::Bogota}; // initialize an "FieldDoctor" player on the given board, in Bogota.
+    player.take_card(City::Johannesburg)     //-
         .take_card(City::Khartoum)
         .take_card(City::Kinshasa) //-
         .take_card(City::BuenosAires)
@@ -462,23 +476,23 @@ TEST_CASE("FieldDoctor Test")
 
     // Test Unique action for FieldDoctor player - treat
     CHECK_NOTHROW(player.treat(City::Bogota)); // legal action.
-    CHECK(board[City::Bogota] == 5); // Reduce the level by 1.
+    CHECK(board[City::Bogota] == 5);           // Reduce the level by 1.
 
     CHECK_NOTHROW(player.treat(City::MexicoCity)); // legal action.
-    CHECK(board[City::MexicoCity] == 2); // Reduce the level by 1.
+    CHECK(board[City::MexicoCity] == 2);           // Reduce the level by 1.
 
     CHECK_NOTHROW(player.treat(City::Miami)); // legal action.
-    CHECK(board[City::Miami] == 1); // Reduce the level by 1.
+    CHECK(board[City::Miami] == 1);           // Reduce the level by 1.
     CHECK_NOTHROW(player.treat(City::Miami)); // legal action.
-    CHECK(board[City::Miami] == 0); // Reduce the level by 1.
-    CHECK_THROWS(player.treat(City::Miami)); // illegal action. disease level already 0.
-    
+    CHECK(board[City::Miami] == 0);           // Reduce the level by 1.
+    CHECK_THROWS(player.treat(City::Miami));  // illegal action. disease level already 0.
+
     CHECK_NOTHROW(player.treat(City::Lima)); // legal action.
-    CHECK(board[City::MexicoCity] == 4); // Reduce the level by 1.
+    CHECK(board[City::MexicoCity] == 4);     // Reduce the level by 1.
 
+    //test role function for player and is_clean function for board
+    CHECK(player.role() == "FieldDoctor");
     CHECK(!board.is_clean());
     board.remove_cures();
     CHECK(board.is_clean());
 }
-
-
